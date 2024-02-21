@@ -1,18 +1,10 @@
-MAN_SER=server.c
-MAN_CLI=client.c
+MAN_SER=src/server.c
+MAN_CLI=src/client.c
 
-BON_SER=server_bonus.c
-BON_CLI=client_bonus.c
+BON_SER=src/server_bonus.c
+BON_CLI=src/client_bonus.c
 
-GSRC= minitalk_utils.c
-
-OMAN_SER=$(MAN_SER)
-OMAN_CLI=$(MAN_CLI)
-
-OBON_SER=$(BON_SER)
-OBON_CLI=$(BON_CLI)
-
-BSRC=$(GSRC)
+GSRC= src/minitalk_utils.c
 
 SERVER=server
 CLIENT=client
@@ -26,16 +18,16 @@ all :$(SERVER) $(CLIENT)
 
 bonus: $(SERVER_BON) $(CLIENT_BON)
 
-$(SERVER) : $(OMAN_SER) $(BSRC)
+$(SERVER) : $(MAN_SER) $(GSRC)
 	@$(CC) $(CFLAGS) $^ -o $@
 
-$(CLIENT) : $(OMAN_CLI) $(BSRC)
+$(CLIENT) : $(MAN_CLI) $(GSRC)
 	@$(CC) $(CFLAGS) $^ -o $@
 
-$(SERVER_BON) : $(OBON_SER) $(BSRC)
+$(SERVER_BON) : $(BON_SER) $(GSRC)
 	@$(CC) $(CFLAGS) $^ -o $@
 
-$(CLIENT_BON) : $(OBON_CLI) $(BSRC)
+$(CLIENT_BON) : $(BON_CLI) $(GSRC)
 	@$(CC) $(CFLAGS) $^ -o $@
 
 clean:

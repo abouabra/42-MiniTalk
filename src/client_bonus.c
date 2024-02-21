@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk_bonus.h"
+#include "../includes/minitalk_bonus.h"
 #include <unistd.h>
 
 void	send_sig(unsigned char s, int server_pid)

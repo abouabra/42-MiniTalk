@@ -1,23 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abouabra < abouabra@student.1337.ma >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 21:40:51 by ayman             #+#    #+#             */
-/*   Updated: 2023/01/02 11:26:53 by abouabra         ###   ########.fr       */
+/*   Updated: 2023/01/02 11:16:47 by abouabra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include "../includes/minitalk_bonus.h"
 
-void	check_interupt(siginfo_t *info, pid_t *client_pid, int *counter)
+void	check_info(siginfo_t *info, pid_t *client_pid, int *counter)
 {
 	if (info->si_pid != *client_pid)
 	{
 		*client_pid = info->si_pid;
 		*counter = 0;
+	}
+}
+
+void	process_second_signal(int SIGUSR, int *counter)
+{
+	if (SIGUSR == SIGUSR2)
+	{
+		(*counter)--;
 	}
 }
 
@@ -28,7 +36,7 @@ void	handle_usr_signals(int SIGUSR, siginfo_t *info, void *vp)
 	static unsigned char	c;
 
 	(void)vp;
-	check_interupt(info, &client_pid, &counter);
+	check_info(info, &client_pid, &counter);
 	if (!counter)
 	{
 		counter = 8;
@@ -39,12 +47,12 @@ void	handle_usr_signals(int SIGUSR, siginfo_t *info, void *vp)
 		c |= 1 << (counter - 1);
 		counter--;
 	}
-	if (SIGUSR == SIGUSR2)
-		counter--;
+	process_second_signal(SIGUSR, &counter);
 	if (counter == 0)
 	{
 		write(1, &c, 1);
 		counter = 0;
+		kill(info->si_pid, SIGUSR1);
 	}
 }
 
